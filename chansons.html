@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>François Denivet — Chansons</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Josefin+Sans:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gold: #C9A84C; --gold-lt: #E0BF72; --gold-pale: rgba(201,168,76,0.15);
+  --gold-line: rgba(201,168,76,0.4); --bg: #1A1208; --bg2: #221808;
+  --bg3: #2C1F0A; --card: #2E2008; --card-hov: #382810;
+  --border: rgba(201,168,76,0.18); --border-md: rgba(201,168,76,0.38);
+  --text1: #F2E6C4; --text2: #C8A85A; --text3: #7A6030;
+  --teal: #4A9E94; --rust: #B05030;
+}
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text1); font-family: 'Josefin Sans', sans-serif; font-weight: 300; min-height: 100vh; overflow-x: hidden; }
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(201,168,76,0.06) 60px),
+    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(201,168,76,0.06) 60px),
+    repeating-linear-gradient(45deg, transparent, transparent 29px, rgba(201,168,76,0.025) 30px),
+    repeating-linear-gradient(-45deg, transparent, transparent 29px, rgba(201,168,76,0.025) 30px);
+  pointer-events: none; z-index: 0;
+}
+.page-wrap { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 0 2rem 5rem; }
+
+.diamond { display: inline-block; width: 7px; height: 7px; background: var(--gold); transform: rotate(45deg); }
+.diamond.sm { width: 4px; height: 4px; }
+.orn-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.orn-rule { flex: 1; max-width: 140px; height: 1px; background: linear-gradient(to right, transparent, var(--gold-line)); }
+.orn-rule.rev { background: linear-gradient(to left, transparent, var(--gold-line)); }
+
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.5rem 0; border-bottom: 1px solid var(--border); margin-bottom: 3rem;
+}
+.back-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--text3); text-decoration: none; transition: color 0.2s;
+}
+.back-link:hover { color: var(--gold); }
+.page-id { font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase; color: var(--text3); }
+
+header { text-align: center; padding: 0 0 3rem; }
+.eyebrow { font-size: 10px; letter-spacing: 0.45em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(40px, 7vw, 64px); font-weight: 400; letter-spacing: 0.12em; color: var(--text1); line-height: 1; text-transform: uppercase; }
+h1 em { font-style: normal; color: var(--gold-lt); font-weight: 600; }
+
+.songs-list { display: flex; flex-direction: column; }
+
+.song-item {
+  background: var(--card); border: 1px solid var(--border); border-bottom: none;
+  overflow: hidden; transition: background 0.2s;
+}
+.song-item:first-child { border-top: 2px solid var(--gold); }
+.song-item:last-child  { border-bottom: 1px solid var(--border); }
+.song-item:hover       { background: var(--card-hov); }
+
+.song-row {
+  display: grid; grid-template-columns: 48px 1fr auto;
+  align-items: center; gap: 1rem; padding: 1.1rem 1.4rem;
+  cursor: default; user-select: none;
+}
+.song-num { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--gold); opacity: 0.45; text-align: right; line-height: 1; }
+.song-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--text1); }
+.song-sub { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text3); margin-top: 3px; }
+.song-ctrls { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+.play-btn {
+  width: 40px; height: 40px; flex-shrink: 0;
+  border: 1px solid var(--border-md); background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.2s, border-color 0.2s;
+}
+.play-btn:hover, .play-btn.on { background: var(--gold-pale); border-color: var(--gold); }
+.play-tri { width:0; height:0; border-style:solid; border-width:6px 0 6px 10px; border-color: transparent transparent transparent var(--gold); margin-left:2px; }
+.pause-bars { display:flex; gap:3px; }
+.pause-bar  { width:3px; height:12px; background:var(--gold); }
+
+.lyrics-btn {
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text3); background: transparent; border: none; cursor: pointer;
+  transition: color 0.2s; white-space: nowrap;
+}
+.lyrics-btn:hover, .lyrics-btn.on { color: var(--gold); }
+.lyr-arrow { display: inline-block; transition: transform 0.2s; margin-left: 3px; }
+.lyrics-btn.on .lyr-arrow { transform: rotate(90deg); }
+
+.audio-bar { display:none; align-items:center; gap:10px; padding:0 1.4rem 0.9rem; }
+.audio-bar.on { display:flex; }
+.a-time { font-size:11px; color:var(--text3); min-width:34px; text-align:center; }
+.prog-wrap { flex:1; height:2px; background:var(--bg3); cursor:pointer; position:relative; }
+.prog-fill { height:100%; background:var(--gold); width:0%; transition:width 0.1s linear; pointer-events:none; }
+
+.lyrics-panel { display:none; padding:1.25rem 1.4rem 1.5rem; border-top:1px solid var(--border); background:var(--bg2); }
+.lyrics-panel.on { display:block; }
+.lyrics-text { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:15px; line-height:2; color:var(--text2); white-space:pre-line; }
+
+footer { text-align:center; padding:2.5rem 0 1rem; border-top:1px solid var(--border); margin-top:1rem; }
+.foot-name { font-family:'Cormorant Garamond',serif; font-size:11px; letter-spacing:0.25em; text-transform:uppercase; color:var(--text3); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);} }
+.fu { animation:fadeUp 0.55s ease both; }
+.fu:nth-child(1){animation-delay:0.05s;} .fu:nth-child(2){animation-delay:0.15s;} .fu:nth-child(3){animation-delay:0.25s;}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="topbar">
+    <a href="index.html" class="back-link">← Accueil</a>
+    <span class="page-id">Chansons</span>
+  </div>
+
+  <header class="fu">
+    <div class="eyebrow">Compositions &amp; Paroles</div>
+    <div class="orn-row" style="margin-bottom:14px;">
+      <div class="orn-rule rev"></div>
+      <div class="diamond sm"></div><div class="diamond"></div><div class="diamond sm"></div>
+      <div class="orn-rule"></div>
+    </div>
+    <h1><em>Chansons</em></h1>
+  </header>
+
+  <div class="songs-list fu" id="songsList"></div>
+
+  <footer>
+    <div class="orn-row" style="margin-bottom:10px;">
+      <div class="orn-rule rev" style="max-width:60px;"></div>
+      <div class="diamond sm"></div><div class="diamond"></div><div class="diamond sm"></div>
+      <div class="orn-rule" style="max-width:60px;"></div>
+    </div>
+    <div class="foot-name">François Denivet — Portfolio</div>
+  </footer>
+</div>
+
+<script>
+const BASE = 'https://github.com/Yorik27/mes-applications/releases/download/V1.0/';
+const SONGS = [
+  { title:'Peine de cœur, maladie de foie', file:BASE+'Peine_de_coeur_maladie_de_foie.mp3', lyrics:`Pour oublier ton p'tit pétard
+J'ai porté l'canon à ma bouche
+J'en ai fait des cadavres épars
+De pleines caisses de blancs, de rouges
+Des litres et des litres que j'ai descendus
+Vidés rincés, le col tordu
+Sans remords, toute honte bue
+
+Peine de cœur, maladie de foie
+Tout ça se terminera un soir
+Un soir où j'serai un peu trop noir
+Le cœur au bout du désespoir
+Peine de cœur, maladie de foie
+Je signerai mon codicille
+Le foie percé, vidant sa bile
+Sur mes amours. Ainsi soit-il.
+
+Pour oublier tes p'tits nibards
+J'ai mis le biberon à ma bouche
+Et je tête dans tous les bars
+De frais nectars, plus ou moins louches
+Tel un fin connaisseur, on m'appelle le lèche-cru
+Ou encore «L'ai-je-bien-descendu»
+Sans vergogne, toute honte bue
+
+Peine de cœur, maladie de foie
+Tout ça se terminera un soir
+Un soir où j'serai un peu trop noir
+Le cœur au bout du désespoir
+Peine de cœur, maladie de foie
+Je signerai mon codicille
+Le foie percé, vidant sa bile
+Sur mes amours. Ainsi soit-il.
+
+Pour oublier mon gros cafard
+J'ai mis le flacon à ma bouche
+J'vais boire comme un trou de mémoire
+Jusqu'à m'endormir comme une souche
+Les souv'nirs, comm' les cerises,
+se conservent dans l'eau-de-vie
+J'boirai la honte jusqu'à la lie
+
+Peine de cœur, maladie de foie
+Tout ça se terminera un soir
+Un soir où j'serai un peu trop noir
+Le cœur au bout du désespoir
+Peine de cœur, maladie de foie
+Je signerai mon codicille
+Le foie percé, vidant sa bile
+Sur mes amours. Ainsi soit-il.` },
+
+  { title:'Tu peux revenir', file:BASE+'Tu_peux_revenir.mp3', lyrics:`Depuis que tu es partie
+En laissant le boxon
+J'r'trouve plus mes petits
+Ça m'servira d'leçon
+Faudrait faire du rangement, classer mes vieilles affaires
+Tu verrais mes habits
+Chemises et pantalons
+C'est du même acabit
+Plis, pattes en tire-bouchon
+C'est vrai que pour le repassage, tu étais de première
+
+Tu peux revenir quand tu veux
+Je t'assure : je ne t'en veux pas
+Ça me fait du mal cet aveu
+Je ne peux pas me passer d'toi
+
+Les diners sont sinistres
+Jambon sans cornichon
+Raviolis froids et tristes,
+Cacahuètes, saucisson
+Faudrait qu'je fasse marcher, cette foutue gazinière
+Je m'rappelle ton frichti,
+Même s'il n'était pas bon
+Au moins il était cuit
+Sans être trop charbon
+Loin d'être un cordon bleu, t'étais bonne cuisinière
+
+Tu peux revenir quand tu veux
+Je t'assure : je ne t'en veux pas
+Ça me fait du mal cet aveu
+Je ne peux pas me passer d'toi
+
+Et pour les nuits coquines,
+Tu me manques souvent
+J'ai bien quelques copines
+qui me trouvent envahissant
+Ce n'est pas tous les jours qu'on m'embarque pour Cythère
+Tu es mon héroïne
+Je suis ton trafiquant
+J'te chanterai nuit de Chine
+J'te ferai même un enfant
+C'est pas ma vocation d'être célibataire
+
+Tu peux revenir quand tu veux
+Je t'assure : je ne t'en veux pas
+Ça me fait du mal c'est affreux
+Je ne peux pas me passer d'toi
+
+Et si tu ne veux pas revenir,
+je finirai drogué pochtron,
+chômeur, sans-abri ou bien pire,
+Chérie fais attention` }, 
+
+{ title:'Je ne l\'ai pas voulu', file:BASE+'Je_ne_lai_pas_voulu.mp3', lyrics:`Ma chérie s'est barrée 
+Sur que j'l'avais trompée
+J'ai voulu m'excuser
+J'ai voulu m'expliquer, 
+J'lui ai dit :
+Je ne l'ai pas voulu
+...
+
+Le fisc est arrivé
+Et il m'a réclamé
+des milliers de dollars
+J'ai rien pour ces gros lards
+j'leur ai dit :
+Je ne l'ai pas voulu
+...
+
+Les flics ont débarqué
+histoire de me calmer,
+j'ai pas aimé leur ton
+j'ai filé des marrons,
+et j'ai dit :
+Je ne l'ai pas voulu
+...
+
+Les flics m'ont enkrysté
+Le juge m'a condamné
+A faire de la prison
+J'ai perdu la raison
+qu'j'ai dit,
+Je ne l'ai pas voulu
+...`}, 
+
+{ title:'Je pense à toi', file:BASE+'Je_pense_a_toi.mp3', lyrics:`Quand je vois l’escalier
+Soigneusement astiqué
+Je pense à toi
+L’armoire à pharmacie
+Parfaitement remplie
+Je pense à toi
+Voyant dans la cuisine
+Les couteaux alignés
+Je pense à toi
+La poutre en bois de chêne
+Joliment pâtinée
+Je pense à toi
+
+Quand je vois l’escalier
+Soigneusement astiqué
+Je pense à toi
+A la chute brutale
+A l’accident fatal
+Je pense à toi
+L’armoire à pharmacie
+Parfaitement remplie
+Je pense à toi
+Tous ces produits chimiques
+Et ces barbituriques
+Je pense à toi
+
+Je pense à toi 
+...
+
+
+Voyant dans la cuisine
+Les couteaux alignés
+Je pense à toi
+A tes deux omoplates
+Ta gorge délicate
+Je pense à toi
+La poutre en bois de chêne
+Joliment pâtinée
+Je pense à toi
+A tes jambes qui dansent
+A ton corps qui balance
+Je pense à toi
+
+Je pense à toi
+...
+
+Quand je vois la montagne
+Ses sommets enneigés
+Je pense à toi
+Je pense à l’avalanche
+Qui pourrait t’emporter
+Je pense à toi
+Quand je vois l’océan
+Gentiment agité
+Je pense à toi
+Je pense à la tempête
+Ou au raz de marée
+Je pense à toi
+
+
+Je pense à toi
+...
+
+Au tremblement de terre
+Au volcan, au séisme
+Je pense à toi
+Qui pourrait te broyer
+Je pense au cataclysme
+Je pense à toi
+Et à la mort subite
+Le serpent, sa morsure
+Je pense à toi
+Ou le météorite
+Tombant sur ta voiture
+Je pense à toi
+
+Je pense à toi
+...
+
+D’un mot doux à l’oreille
+Alors tu me réveilles
+Qu’est-ce que tu as
+Je baille et je m’étire
+Et réponds d’un sourire
+Je pense à toi
+...
+` }, 
+
+
+{ title:'La nostalgie', file:BASE+'La_nostalgie.mp3', lyrics:`C'est l'odeur des tilleuls
+Qui rythmaient l'avenue
+La cour de notre école
+Et nos jeux éperdus
+C'est l'éclairage au gaz
+Des romans de Vialatte
+C'est Toulouse qui jazze
+Nouga noir écarlate
+C'est le cri un peu sourd
+D'un bonheur en allé
+Un appel au secours
+A ses jeunes années
+C'est un gentil sourire
+Offert à ton passé
+Lorsque les souvenirs
+Viennent te consoler
+
+La nostalgie
+C'est le doux et l'amer
+C'est le cœur dans la pierre
+Des visiteurs d'hier
+La nostalgie
+C'est le cœur qui se serre
+Quand jadis et naguère
+Triomphent de l'oubli
+
+Les œufs durs de midi
+Écallés sur le zinc
+Un ancien tourne-disque
+Une chanson de bastringue
+Les chiffres du flipper
+Avant l'électronique
+Une loco à vapeur
+Sous un pont métallique
+C'est un amour ancien
+Peuplant ta solitude
+C'est la mer qui revient
+Dans son incertitude
+C'est le sentimento
+Du tango argentin
+La mémoire du dos
+Se rappelant la main
+
+La nostalgie
+C'est le doux et l'amer
+C'est le cœur dans la pierre
+Des visiteurs d'hier
+La nostalgie
+C'est le cœur qui se serre
+Quand jadis et naguère
+Triomphent de l'oubli
+
+C'est le regard en coin
+D'une poule révolue
+Pensant à son turbin
+Quand la rue ne paie plus
+C'est l'odeur des faubourgs
+C'est le parler patois
+Ou l'argot un peu lourd
+Qui fleurissait chez toi
+C'est l'amour sous latex
+Avant l'épidémie
+L'parfum du Beaujolais
+Avant l'régime Vichy
+C'est un gardien de square
+C'est une dame-pipi
+C'est l'esquif sans le phare
+Quand l'océan s'ennuie
+
+La nostalgie
+C'est le doux et l'amer
+C'est le cœur dans la pierre
+Des visiteurs d'hier
+La nostalgie
+C'est le cœur qui se serre
+Quand jadis et naguère
+Triomphent de l'oubli` },
+
+  { title:'La vie est dégueulasse', file:BASE+'La_vie_est_de_gueulasse.mp3', lyrics:`(À Léo Malet)
+
+Su'l'canal Saint-Martin
+Y a une vieill' pute
+Qui t'regarde l'œil en coin
+Qui sourit comme la Joconde
+La vie est dégueulasse
+Le soleil brille pas pour tout l'monde
+Mais c'est si joli l'canal Saint-Martin
+
+Su'l'canal Saint-Martin
+Y a une vieill' pute
+Il y a deux p'tits béguins
+Qui s'bécotent depuis une plombe
+La vie est dégueulasse
+Le soleil brille pas pour tout l'monde
+Mais c'est si joli l'canal Saint-Martin
+
+Su'l'canal Saint-Martin
+Y a cette vieill' pute
+Y a un gars dont la main
+Lâche une fine lame dans l'onde
+La vie est dégueulasse
+Le soleil brille pas pour tout l'monde
+Mais c'est si joli l'canal Saint-Martin
+
+Su'l'canal Saint-Martin
+Y a plus la vieill' pute
+Y a plus qu'son assassin
+Qui ricane quand les flics débondent
+La vie est dégueulasse
+Le soleil brille pas pour tout l'monde
+Mais c'est si joli l'canal Saint-Martin` },
+
+  { title:'Le chanteur solitaire', file:BASE+'Le_chanteur_solitaire.mp3', lyrics:`Voilà, c'est moi, je me présente
+Avec ma guitare à trois notes
+Une voix qu'est pas déplaisante
+Et quelques chansons dans ma hotte
+J'suis allé voir un éditeur
+Qui roupillait au-dessus de son ventre
+J'avais le regard prometteur
+J'ai dit d'une voix tonitruante
+
+Puisqu'il paraît que dans c'métier
+Pour réussir il faut coucher
+Profitez-en, c'est moi que v'là
+Faites de moi tout c'qui vous plaira
+J'veux être célèbre, j'veux être connu
+Ailleurs qu'au tabac dans ma rue
+D'ailleurs, j'fume plus, c'est pas malin
+Ça m'fait un auditeur en moins
+
+J'sais pas pourquoi, l'a pas voulu
+Il n'a même pas été poli
+Je suis parti comme je suis v'nu
+Il y a comme une anomalie
+Je n'suis qu'un chanteur solitaire (Chœur : Solitaire)
+Un pauvre chanteur qui fait des vers (Chœur : Solitaire)
+
+Voilà c'est moi, je me dénomme
+Avec mon carnet à spirale
+Une frimousse qu'est pas trop pomme,
+Une expression, pas trop banale,
+J'suis allé voir un producteur
+Qui dormait au-dessus d'son cigare
+J'ai dit le regard tentateur
+Z'allez voir c'que vous allez voir
+
+Puisqu'il paraît que dans c'métier
+Pour réussir, il faut coucher
+Profitez-en, c'est moi que v'là
+Faites à mon corps c'qui vous plaira
+J'veux être célèbre, j'veux être connu
+Ailleurs qu'au boucher dans ma rue
+Depuis que j'suis végétarien
+Ça m'fait un auditeur en moins
+
+J'sais pas pourquoi, l'a pas voulu
+Il n'a même pas été poli
+Je suis parti comme je suis v'nu
+Il y a comme une anomalie
+Je n'suis qu'un chanteur solitaire (Chœur : Solitaire)
+Un pauvre chanteur qui fait des vers (Chœur : Solitaire)
+
+Voilà c'est moi, enfin, il m'semble
+Un moral d'acier pas d'complexe
+Rien ne m'effraie, jamais je tremble,
+Une bête de scène, une bête de sexe,
+J'suis allé dans les music-halls
+Les cabarets les plus sinistres
+J'ai fait le regard qui enjole
+Regardez c'que c'est qu'un artiste
+
+Puisqu'il paraît que dans c'métier
+Pour réussir, il faut coucher
+Profitez-en, c'est moi que v'là
+Faites-moi que'que chose qui vous plaira
+J'veux être célèbre, j'veux être connu
+Ailleurs qu'au bistrot dans ma rue
+Et comme j'bois plus d'café l'matin
+Ça m'fait un spectateur en moins
+
+J'sais pas pourquoi, z'ont pas voulu
+Ils ont même été impolis
+Ça m'fait encore une chanson d'plus
+Et toujours personne dans mon lit
+Je n'suis qu'un chanteur solitaire (Chœur : Solitaire)
+Un pauvre chanteur qui fait des vers (Chœur : Solitaire)` },
+
+  { title:'Moi femme', file:BASE+'Moi_femme.mp3', lyrics:`J'ai un tas d'copains
+Que j'vois tous les soirs
+Au tabac du coin
+Ou alors au Chat Noir
+Quand on m'parle d'amour
+Cela me fait bailler
+Tous ces beaux discours
+Risquent de m'ennuyer
+
+Ça n'est pas pour ça qu'je n'suis pas féminine
+Mais ça fait vingt ans que j'connais la combine
+Réfléchis avant de m'traiter d'infâme
+La la la la… Je n'suis qu'une femme
+
+Les longs soirs d'hiver
+Moi j'aime bien péter
+Et roter ma bière
+Devant la télé
+Voir des gars en short
+Taper dans l'ballon
+Quand on aime le sport
+On s'met en condition
+
+Ça n'est pas pour ça qu'je n'suis pas féminine
+Mais ça fait vingt ans que j'connais la combine
+Réfléchis avant de m'traiter d'infâme
+La la la la… Je n'suis qu'une femme
+
+Dans ma p'tite auto
+Su'l'périph à cinq heures
+J'lève le doigt bien haut
+Je fais des bras d'honneur
+J'fais la course avec
+Mon six cylindres en V
+J'supporte pas qu'un mec
+Veuille me dépasser
+
+Ça n'est pas pour ça qu'je n'suis pas féminine
+Mais ça fait vingt ans que j'connais la combine
+T'aimes pas voir chez moi ce que tu es en somme
+La la la la… Tu n'es qu'un homme` },
+
+
+{ title:'Le bon Dieu', file:BASE+'C_est_le_bon_dieu.mp3', lyrics:`Attention, mademoiselle, faut couper le clitoris
+C'est qui qui, qui l'a dit
+C'est l'bon dieu, qui l'a dit
+Faut recoudre la zézette, c'est un trou qu'est interdit
+C'est qui qui, qui l'a dit
+C'est l'bon dieu, qui l'a dit
+C'est l'bon dieu, c'est l'bon dieu, c'est l'bon dieu qu'a tout écrit
+
+Attention, mon garçon, faut couper l'bout du zizi
+C'est qui qui, qui l'a dit
+C'est l'bon dieu, qui l'a dit
+Mais faut pas couper les poils, les poils ça c'est interdit
+C'est qui qui, qui l'a dit
+C'est l'bon dieu, qui l'a dit
+C'est l'bon dieu, c'est l'bon dieu, c'est l'bon dieu qu'a tout écrit
+
+Attention, les enfants, faut pas faire guili-guili
+C'est qui qui, qui l'a dit
+C'est l'bon dieu, qui l'a dit
+Ou alors sans s'marrer, rigoler, c'est interdit
+C'est qui qui, qui l'a dit
+C'est l'bon dieu, qui l'a dit
+C'est l'bon dieu, c'est l'bon dieu, c'est l'bon dieu qu'a tout écrit
+
+Il faut faire des enfants, et les faire sans plaisir
+C'est qui qui, qui l'a dit
+C'est l'bon dieu, qui l'a dit
+Et surtout pas l'inverse, le latex, c'est interdit
+C'est qui qui, qui l'a dit
+C'est l'bon dieu, qui l'a dit
+C'est l'bon dieu, c'est l'bon dieu, c'est l'bon dieu qu'a tout écrit
+
+Et être très malheureux, surtout très malheureux
+Souffrir, beaucoup souffrir
+Pleurer et puis prier
+Le bon dieu, le bon dieu`
+  },
+
+  { title:'Quel est le sexe des anges', file:BASE+'Quel_est_le_sexe_des_anges.mp3', lyrics:`Les anges à l'angélus soupirent ingénus
+Dans le silence
+Deux anges à l'heure élue s'allongent alors émus
+Le corps dénudé
+Quel est le sexe des anges ? Quel est le sexe des anges ?
+Les anges à l'angélus transpirent transportés
+Dans la chaleur de l'été
+Deux anges à l'heure élue s'invitent agités
+Le corps en partance
+Quel est le sexe des anges ? Quel est le sexe des anges ?
+
+Et ils se nouent, s'enlacent
+Se mêlent, s'allument,
+S'attirent et s'arrachent,
+Et ils s'échouent, s'enchassent
+Se mènent, consument
+S'entichent et s'attachent
+
+Les anges à l'angélus goûtent moites et moulus
+La nonchalance
+Deux anges à l'heure élue reposent heureux fourbus,
+Le corps apaisé
+Quel est le sexe des anges ? Quel est le sexe des anges ?
+Les anges à l'angélus passent à pas feutrés
+Dans leur candeur empétrés
+Deux anges à l'heure élue dans leur premier baiser
+Rient de leur enfance`
+  },
+
+  { title:'S\'il faut aimer la terre', file:BASE+'S_il_faut_aimer_la_terre.mp3', lyrics:`Dis-moi pourquoi ma mère
+Tu m’as fait ça
+Dis-moi pourquoi ma mère
+Tu m’as fait dans ce monde-là (bis)
+
+La louve et la panthère
+Au coin du bois
+La louve et la panthère
+Sont bien moins cruelles que toi (bis)
+
+On pleure sur la misère
+Qui ne pleure pas ?
+On pleure sur la misère
+Jamais on ne s’en guérira (bis)
+
+Mendiants et pauvres hères
+Sont assis là
+Mendiants et pauvres hères
+Valent bien moins que leur trépas (bis)
+
+Les riches veulent la guerre
+Qui la fera ?
+Les riches veulent la guerre
+Mais ils n’y succomberont pas (bis)
+
+Ceux que l’on rend prospères
+Que font ceux-là
+Ceux que l’on rend prospères
+Ne s’en souviennent pas (bis)
+
+S’il faut toujours se taire
+Qui parlera ?
+S’il faut toujours se taire
+Jamais la vie ne changera (bis)
+
+J’emporte ma colère
+Dans l’au-delà
+J’emporte ma colère
+Au pays où l’on ne ment pas (bis)
+
+S’il faut aimer la terre
+Qui l’aimera ?
+S’il faut aimer la terre
+Alors qu’on la jette sur moi (bis)`
+  },
+
+  { title:'La publicité', file:BASE+'La_publicite.mp3', lyrics:`Sans publicité t’es marron
+Lève ton nez vers les affiches
+C’est du bonheur pour pas un rond
+D’nos jours faut faire gaffe à l’artiche
+Il reste des gens de bon conseil
+Qui feront tout pour ton confort
+En surveillant bien ton oseille
+Pourquoi s’priver, tu aurais tort
+
+Des filles au sourire dentifrice
+Qui chantent l’amour et ses délices
+Les vacances à deux pour pas cher
+Les îles dorées et leurs mystères
+Des rasoirs à faire la peau douce
+Une bière légère grâce à sa mousse
+Des lits pour y faire des câlins
+Dans des draps fleuris en satin
+
+Pour être heureux, dame, c’est facile,
+Tu auras tout c’que tu désires
+Y a pas d’problème, t’as qu’à choisir
+Regarde sur les murs de ta ville.
+
+Un magazine avec ses recettes
+Pour la cuisine et la toilette
+La banque du bonheur pour les frais
+Et d’faux bijoux plus beaux que les vrais
+Des magasins où tu peux tout
+T’acheter sans débourser un sou
+Des lampes à pied, des sacs à main
+Et des jouets pour les gamins
+
+L’odeur des prés, l’eau des montagnes
+Des poulets nés à la campagne
+Des cosmétiques pour la moquette,
+Tout Van Gogh peint dans une cassette
+Des téléphones où pour appeler,
+T’as même plus besoin d’te lever
+De vrais saumons de la Baltique
+Et du caviar démocratique
+
+Refrain
+
+Une télé grandeur nature
+De l’huile sans odeur de friture
+Un silence d’or des jeux d’argent
+Une montre à quartz pour compter l’temps
+Du chocolat au vrai lait d’vache
+De la lessive nourrie aux taches
+Des sachets de bœuf miroton
+D’l’antiseptique pour les boutons
+
+Des vitamines qui tuent l’cafard,
+Des assurances pour dans plus tard,
+Quand tu s’ras vieux ou au cimetière,
+Et une bagnole dont tu s’ras fier.
+Une cafetière qui sonne le matin
+Des cours du soir pour ton turbin
+Des films marrants ou bien tragiques
+Et mes conneries mises en musique.
+
+Refrain
+
+Et tant pis si tu n’as pas de quoi,
+Y en a plein d’autres à qui ça va.`
+  },
+
+
+];
+
+
+let currentAudio = null;
+
+function fmt(s) { if(!isFinite(s)) return '0:00'; const m=Math.floor(s/60),sec=Math.floor(s%60); return m+':'+(sec<10?'0':'')+sec; }
+
+function render() {
+  const list = document.getElementById('songsList');
+  SONGS.forEach((s, i) => {
+    const hasL = s.lyrics && s.lyrics.trim().length > 0;
+    const el = document.createElement('div');
+    el.className = 'song-item';
+    el.innerHTML = `
+      <div class="song-row">
+        <div class="song-num">${String(i+1).padStart(2,'0')}</div>
+        <div>
+          <div class="song-title">${s.title}</div>
+          <div class="song-sub">Composition · Suno${hasL?' · Paroles':''}</div>
+        </div>
+        <div class="song-ctrls">
+          ${hasL?`<button class="lyrics-btn" data-i="${i}">Paroles<span class="lyr-arrow">›</span></button>`:''}
+          <button class="play-btn" data-i="${i}"><span class="play-tri"></span></button>
+        </div>
+      </div>
+      <div class="audio-bar" id="ab-${i}">
+        <span class="a-time" id="ac-${i}">0:00</span>
+        <div class="prog-wrap" id="ap-${i}"><div class="prog-fill" id="af-${i}"></div></div>
+        <span class="a-time" id="ad-${i}">0:00</span>
+      </div>
+      ${hasL?`<div class="lyrics-panel" id="al-${i}"><div class="lyrics-text">${s.lyrics.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</div></div>`:''}`;
+    list.appendChild(el);
+  });
+  document.querySelectorAll('.play-btn').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); togglePlay(parseInt(b.dataset.i), b); }));
+  document.querySelectorAll('.lyrics-btn').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation();
+    const p = document.getElementById('al-'+b.dataset.i);
+    if(p) { p.classList.toggle('on'); b.classList.toggle('on'); }
+  }));
+  document.querySelectorAll('.prog-wrap').forEach(pw => pw.addEventListener('click', e => {
+    const i = parseInt(pw.id.replace('ap-',''));
+    if(currentAudio && parseInt(currentAudio.dataset.i)===i) {
+      const r=pw.getBoundingClientRect();
+      currentAudio.currentTime=((e.clientX-r.left)/r.width)*currentAudio.duration;
+    }
+  }));
+}
+
+function togglePlay(i, btn) {
+  const bar = document.getElementById('ab-'+i);
+  if(currentAudio && parseInt(currentAudio.dataset.i)===i) {
+    if(currentAudio.paused){currentAudio.play();setPl(btn,true);}
+    else{currentAudio.pause();setPl(btn,false);}
+    return;
+  }
+  if(currentAudio) {
+    currentAudio.pause();
+    const pi=currentAudio.dataset.i;
+    const pb=document.querySelector(`.play-btn[data-i="${pi}"]`); if(pb)setPl(pb,false);
+    const pb2=document.getElementById('ab-'+pi); if(pb2)pb2.classList.remove('on');
+  }
+  const audio=new Audio(SONGS[i].file); audio.dataset.i=i; currentAudio=audio;
+  bar.classList.add('on');
+  audio.addEventListener('loadedmetadata',()=>{const d=document.getElementById('ad-'+i);if(d)d.textContent=fmt(audio.duration);});
+  audio.addEventListener('timeupdate',()=>{
+    const c=document.getElementById('ac-'+i),f=document.getElementById('af-'+i);
+    if(c)c.textContent=fmt(audio.currentTime);
+    if(f&&audio.duration)f.style.width=(audio.currentTime/audio.duration*100)+'%';
+  });
+  audio.addEventListener('ended',()=>{setPl(btn,false);bar.classList.remove('on');const f=document.getElementById('af-'+i);if(f)f.style.width='0%';});
+  audio.play().then(()=>setPl(btn,true)).catch(()=>{});
+}
+
+function setPl(btn,on){
+  btn.classList.toggle('on',on);
+  btn.innerHTML=on?'<span class="pause-bars"><span class="pause-bar"></span><span class="pause-bar"></span></span>':'<span class="play-tri"></span>';
+}
+
+render();
+</script>
+</body>
+</html>

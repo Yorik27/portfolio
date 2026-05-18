@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>François Denivet — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Josefin+Sans:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gold: #C9A84C; --gold-lt: #E0BF72; --gold-pale: rgba(201,168,76,0.15);
+  --gold-line: rgba(201,168,76,0.4); --bg: #1A1208; --bg2: #221808;
+  --bg3: #2C1F0A; --card: #2E2008; --card-hov: #382810;
+  --border: rgba(201,168,76,0.18); --border-md: rgba(201,168,76,0.38);
+  --text1: #F2E6C4; --text2: #C8A85A; --text3: #7A6030;
+  --teal: #4A9E94; --rust: #B05030;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text1);
+  font-family: 'Josefin Sans', sans-serif; font-weight: 300;
+  min-height: 100vh; overflow-x: hidden;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(201,168,76,0.06) 60px),
+    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(201,168,76,0.06) 60px),
+    repeating-linear-gradient(45deg, transparent, transparent 29px, rgba(201,168,76,0.025) 30px),
+    repeating-linear-gradient(-45deg, transparent, transparent 29px, rgba(201,168,76,0.025) 30px);
+  pointer-events: none; z-index: 0;
+}
+.wrap {
+  position: relative; z-index: 1;
+  max-width: 700px; width: 100%;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+.diamond { display: inline-block; width: 7px; height: 7px; background: var(--gold); transform: rotate(45deg); }
+.diamond.sm { width: 4px; height: 4px; }
+.diamond.teal { background: var(--teal); }
+.diamond.rust { background: var(--rust); }
+.orn-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; }
+.orn-rule { flex: 1; max-width: 140px; height: 1px; background: linear-gradient(to right, transparent, var(--gold-line)); }
+.orn-rule.rev { background: linear-gradient(to left, transparent, var(--gold-line)); }
+
+.eyebrow { font-size: 10px; letter-spacing: 0.45em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+
+h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(48px, 9vw, 80px);
+  font-weight: 400; letter-spacing: 0.14em;
+  color: var(--text1); line-height: 1; text-transform: uppercase;
+}
+h1 em { font-style: normal; color: var(--gold-lt); font-weight: 600; }
+
+.tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 19px;
+  color: var(--text2); margin-top: 14px; margin-bottom: 3rem;
+}
+
+/* NAV CARDS */
+.nav-cards {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
+  margin-bottom: 3rem;
+}
+
+.nav-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-top: 2px solid var(--gold);
+  padding: 2rem 1.5rem; text-decoration: none;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  transition: background 0.25s, border-color 0.2s;
+  position: relative;
+}
+.nav-card::before, .nav-card::after {
+  content: ''; position: absolute; width: 10px; height: 10px;
+  border-color: var(--gold); border-style: solid; opacity: 0.3;
+}
+.nav-card::before { bottom: 7px; right: 7px; border-width: 0 1px 1px 0; }
+.nav-card::after  { bottom: 7px; left:  7px; border-width: 0 0 1px 1px; }
+.nav-card:hover { background: var(--card-hov); border-top-color: var(--gold-lt); }
+
+.nav-card-icon { font-size: 32px; line-height: 1; }
+
+.nav-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 600; color: var(--text1);
+  letter-spacing: 0.04em;
+}
+.nav-card-sub {
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: #A88840; text-align: center; line-height: 1.6;
+}
+.nav-card-arrow {
+  font-size: 18px; color: var(--gold); margin-top: 4px; opacity: 0.7;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.nav-card:hover .nav-card-arrow { opacity: 1; transform: translateX(4px); }
+
+/* CONTACT */
+.contact-block {
+  border-top: 1px solid var(--border);
+  padding-top: 2rem;
+}
+.contact-label {
+  font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase;
+  color: #A88840; margin-bottom: 8px;
+}
+.contact-email {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px; color: var(--gold-lt);
+  text-decoration: none; letter-spacing: 0.03em;
+  border-bottom: 1px solid var(--gold-line);
+  transition: color 0.2s, border-color 0.2s;
+}
+.contact-email:hover { color: var(--gold); border-color: var(--gold); }
+
+.footer-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+  color: #A88840; margin-top: 2.5rem;
+}
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+.fu { animation: fadeUp 0.6s ease both; }
+.fu:nth-child(1) { animation-delay: 0.05s; }
+.fu:nth-child(2) { animation-delay: 0.15s; }
+.fu:nth-child(3) { animation-delay: 0.25s; }
+.fu:nth-child(4) { animation-delay: 0.35s; }
+.fu:nth-child(5) { animation-delay: 0.45s; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="fu">
+    <div class="eyebrow">Portfolio créatif</div>
+    <div class="orn-row">
+      <div class="orn-rule rev"></div>
+      <div class="diamond sm"></div><div class="diamond"></div><div class="diamond sm"></div>
+      <div class="orn-rule"></div>
+    </div>
+    <h1>François<br><em>Denivet</em></h1>
+    <p class="tagline">Développeur · Auteur</p>
+  </div>
+
+  <div class="nav-cards fu">
+    <a href="developpements.html" class="nav-card">
+      <div class="nav-card-icon">💻</div>
+      <div class="nav-card-title">Développements</div>
+      <div class="nav-card-sub">Applications Android<br>Sites Web</div>
+      <div class="nav-card-arrow">→</div>
+    </a>
+    <a href="chansons.html" class="nav-card">
+      <div class="nav-card-icon">🎵</div>
+      <div class="nav-card-title">Chansons</div>
+      <div class="nav-card-sub">Compositions · Paroles<br>Musique Suno</div>
+      <div class="nav-card-arrow">→</div>
+    </a>
+  </div>
+
+  <div class="contact-block fu">
+    <div class="contact-label">Me contacter</div>
+    <a href="mailto:fdenivet@free.fr" class="contact-email">fdenivet@free.fr</a>
+  </div>
+
+  <div class="footer-name fu">
+    <div class="orn-row" style="margin-bottom:8px; margin-top:2rem;">
+      <div class="orn-rule rev" style="max-width:50px;"></div>
+      <div class="diamond sm teal"></div><div class="diamond sm"></div><div class="diamond sm rust"></div>
+      <div class="orn-rule" style="max-width:50px;"></div>
+    </div>
+    François Denivet — Portfolio
+  </div>
+</div>
+</body>
+</html>
