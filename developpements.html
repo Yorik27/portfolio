@@ -335,6 +335,47 @@ footer { text-align: center; padding: 2.5rem 0 1rem; border-top: 1px solid var(-
       </div>
     </div>
 
+    <!-- SAINTEX -->
+    <div class="project">
+      <div class="project-header">
+        <div class="project-title-row">
+          <div class="project-icon"><img src="saintex_icon.png" alt="SaintEx" style="width:100%;height:100%;object-fit:cover;border-radius:8px;"></div>
+          <div class="project-name">SaintEx</div>
+        </div>
+        <p class="project-desc">Jeu de mots multijoueur en temps réel. Chaque joueur choisit un mot secret que son adversaire tente de deviner en proposant des mots — chaque proposition révèle les lettres communes. Le premier à trouver le mot de l'autre gagne. Disponible en solo contre l'IA et en défi humain.</p>
+        <div class="tags">
+          <span class="tag">PWA</span><span class="tag">Android</span><span class="tag">Google Play</span>
+          <span class="tag">Supabase</span><span class="tag">Netlify</span><span class="tag">Multijoueur</span>
+        </div>
+        <div class="btn-actions">
+          <a href="https://github.com/Yorik27/saintex" target="_blank" class="btn btn-gold">
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M7 1h4v4M11 1L6 6M2 3H1v8h8v-1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Voir sur GitHub
+          </a>
+        </div>
+      </div>
+      <div class="screenshots portrait">
+        <div class="screenshot-wrap"><img src="saintex_01.png" alt="SaintEx — accueil" onclick="openLb(this.src)"></div>
+        <div class="screenshot-wrap"><img src="saintex_02.png" alt="SaintEx — défi humain" onclick="openLb(this.src)"></div>
+        <div class="screenshot-wrap"><img src="saintex_03.png" alt="SaintEx — joueurs en ligne" onclick="openLb(this.src)"></div>
+        <div class="screenshot-wrap"><img src="saintex_04.png" alt="SaintEx — amis" onclick="openLb(this.src)"></div>
+        <div class="screenshot-wrap"><img src="saintex_05.png" alt="SaintEx — victoire" onclick="openLb(this.src)"></div>
+      </div>
+      <div class="realise">
+        <button class="realise-toggle" onclick="toggleRealise(this)">Ce que j'ai réalisé <span class="realise-arrow">›</span></button>
+        <div class="realise-body">
+          <ol>
+            <li>PWA + TWA Android via Bubblewrap, déployée sur Netlify et Google Play</li>
+            <li>Multijoueur temps réel via Supabase Realtime — parties, chat, système d'amis</li>
+            <li>Timer synchronisé entre joueurs, gestion des abandons et des déconnexions</li>
+            <li>Dictionnaire de 5 918 mots catégorisés (noms, verbes, adjectifs, adverbes)</li>
+            <li>Interface responsive avec clavier virtuel adaptatif</li>
+            <li>Mode hors ligne via Service Worker</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
     <!-- PORTFOLIO -->
     <div class="project">
       <div class="project-header">
