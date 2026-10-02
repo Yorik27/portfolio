@@ -817,7 +817,7 @@ function render() {
     const i = parseInt(b.dataset.i);
     const alreadyPlaying = currentAudio && parseInt(currentAudio.dataset.i) === i && !currentAudio.paused;
     if (!alreadyPlaying) {
-      try { window.umami && window.umami.track('play:'+SONGS[i].title); } catch(err) {}
+      try { window.umami && window.umami.track('song_play', { title: SONGS[i].title }); } catch(err) {}
     }
     togglePlay(i, b);
   }));
@@ -829,7 +829,7 @@ function render() {
       const opening = !p.classList.contains('on');
       p.classList.toggle('on'); b.classList.toggle('on');
       if (opening) {
-        try { window.umami && window.umami.track('lyrics:'+SONGS[i].title); } catch(err) {}
+        try { window.umami && window.umami.track('lyrics_open', { title: SONGS[i].title }); } catch(err) {}
       }
     }
   }));
