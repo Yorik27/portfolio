@@ -143,7 +143,7 @@ footer { text-align:center; padding:2.5rem 0 1rem; border-top:1px solid var(--bo
 <script>
 const BASE = 'https://github.com/Yorik27/mes-applications/releases/download/V1.0/';
 const SONGS = [
-  { title:'Peine de cœur, maladie de foie', file:BASE+'Peine_de_cœur_maladie_de_foie.mp3', lyrics:`Pour oublier ton p'tit pétard
+  { title:'Peine de cœur, maladie de foie', file:BASE+'Peine_de_coeur_maladie_de_foie.mp3', lyrics:`Pour oublier ton p'tit pétard
 J'ai porté l'canon à ma bouche
 J'en ai fait des cadavres épars
 De pleines caisses de blancs, de rouges
@@ -864,7 +864,8 @@ function togglePlay(i, btn) {
     if(f&&audio.duration)f.style.width=(audio.currentTime/audio.duration*100)+'%';
   });
   audio.addEventListener('ended',()=>{setPl(btn,false);bar.classList.remove('on');const f=document.getElementById('af-'+i);if(f)f.style.width='0%';});
-  audio.play().then(()=>setPl(btn,true)).catch(()=>{});
+  audio.addEventListener('error',()=>{setPl(btn,false);bar.classList.remove('on');currentAudio=null;});
+  audio.play().then(()=>setPl(btn,true)).catch(err=>{setPl(btn,false);bar.classList.remove('on');currentAudio=null;console.warn('Audio error:',err);});
 }
 
 function setPl(btn,on){
