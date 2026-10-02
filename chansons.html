@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>François Denivet — Chansons</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Josefin+Sans:wght@300;400&display=swap" rel="stylesheet">
+<script defer src="https://cloud.umami.is/script.js" data-website-id="46f71089-1e17-4bb6-b59a-80199c6760ca"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -816,7 +817,7 @@ function render() {
     const i = parseInt(b.dataset.i);
     const alreadyPlaying = currentAudio && parseInt(currentAudio.dataset.i) === i && !currentAudio.paused;
     if (!alreadyPlaying) {
-      try { window.va && window.va('event', { name: 'song_play', properties: { title: SONGS[i].title } }); } catch(err) {}
+      try { window.umami && window.umami.track('song_play', { title: SONGS[i].title }); } catch(err) {}
     }
     togglePlay(i, b);
   }));
@@ -828,7 +829,7 @@ function render() {
       const opening = !p.classList.contains('on');
       p.classList.toggle('on'); b.classList.toggle('on');
       if (opening) {
-        try { window.va && window.va('event', { name: 'lyrics_open', properties: { title: SONGS[i].title } }); } catch(err) {}
+        try { window.umami && window.umami.track('lyrics_open', { title: SONGS[i].title }); } catch(err) {}
       }
     }
   }));
