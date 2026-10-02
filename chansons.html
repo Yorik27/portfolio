@@ -140,8 +140,9 @@ footer { text-align:center; padding:2.5rem 0 1rem; border-top:1px solid var(--bo
 </div>
 
 <script>
+const BASE = 'https://github.com/Yorik27/mes-applications/releases/download/V1.0/';
 const SONGS = [
-  { title:'Peine de cœur, maladie de foie', file:'Peine_de_cœur_maladie_de_foie.mp3', lyrics:`Pour oublier ton p'tit pétard
+  { title:'Peine de cœur, maladie de foie', file:BASE+'Peine_de_cœur_maladie_de_foie.mp3', lyrics:`Pour oublier ton p'tit pétard
 J'ai porté l'canon à ma bouche
 J'en ai fait des cadavres épars
 De pleines caisses de blancs, de rouges
@@ -192,7 +193,7 @@ Je signerai mon codicille
 Le foie percé, vidant sa bile
 Sur mes amours. Ainsi soit-il.` },
 
-  { title:'Tu peux revenir', file:'Tu_peux_revenir.mp3', lyrics:`Depuis que tu es partie
+  { title:'Tu peux revenir', file:BASE+'Tu_peux_revenir.mp3', lyrics:`Depuis que tu es partie
 En laissant le boxon
 J'r'trouve plus mes petits
 Ça m'servira d'leçon
@@ -245,7 +246,7 @@ je finirai drogué pochtron,
 chômeur, sans-abri ou bien pire,
 Chérie fais attention` }, 
 
-{ title:'Je ne l\'ai pas voulu', file:'Je_ne_lai_pas_voulu.mp3', lyrics:`Ma chérie s'est barrée 
+{ title:'Je ne l\'ai pas voulu', file:BASE+'Je_ne_lai_pas_voulu.mp3', lyrics:`Ma chérie s'est barrée 
 Sur que j'l'avais trompée
 J'ai voulu m'excuser
 J'ai voulu m'expliquer, 
@@ -277,7 +278,7 @@ qu'j'ai dit,
 Je ne l'ai pas voulu
 ...`}, 
 
-{ title:'Je pense à toi', file:'Je_pense_a_toi.mp3', lyrics:`Quand je vois l’escalier
+{ title:'Je pense à toi', file:BASE+'Je_pense_a_toi.mp3', lyrics:`Quand je vois l’escalier
 Soigneusement astiqué
 Je pense à toi
 L’armoire à pharmacie
@@ -366,7 +367,7 @@ Je pense à toi
 ` }, 
 
 
-{ title:'La nostalgie', file:'La_nostalgie.mp3', lyrics:`C'est l'odeur des tilleuls
+{ title:'La nostalgie', file:BASE+'La_nostalgie.mp3', lyrics:`C'est l'odeur des tilleuls
 Qui rythmaient l'avenue
 La cour de notre école
 Et nos jeux éperdus
@@ -444,7 +445,7 @@ C'est le cœur qui se serre
 Quand jadis et naguère
 Triomphent de l'oubli` },
 
-  { title:'La vie est dégueulasse', file:'La_vie_est_de_gueulasse.mp3', lyrics:`(À Léo Malet)
+  { title:'La vie est dégueulasse', file:BASE+'La_vie_est_de_gueulasse.mp3', lyrics:`(À Léo Malet)
 
 Su'l'canal Saint-Martin
 Y a une vieill' pute
@@ -478,7 +479,7 @@ La vie est dégueulasse
 Le soleil brille pas pour tout l'monde
 Mais c'est si joli l'canal Saint-Martin` },
 
-  { title:'Le chanteur solitaire', file:'Le_chanteur_solitaire.mp3', lyrics:`Voilà, c'est moi, je me présente
+  { title:'Le chanteur solitaire', file:BASE+'Le_chanteur_solitaire.mp3', lyrics:`Voilà, c'est moi, je me présente
 Avec ma guitare à trois notes
 Une voix qu'est pas déplaisante
 Et quelques chansons dans ma hotte
@@ -553,7 +554,7 @@ Et toujours personne dans mon lit
 Je n'suis qu'un chanteur solitaire (Chœur : Solitaire)
 Un pauvre chanteur qui fait des vers (Chœur : Solitaire)` },
 
-  { title:'Moi femme', file:'Moi_femme.mp3', lyrics:`J'ai un tas d'copains
+  { title:'Moi femme', file:BASE+'Moi_femme.mp3', lyrics:`J'ai un tas d'copains
 Que j'vois tous les soirs
 Au tabac du coin
 Ou alors au Chat Noir
@@ -596,7 +597,7 @@ T'aimes pas voir chez moi ce que tu es en somme
 La la la la… Tu n'es qu'un homme` },
 
 
-{ title:'Le bon Dieu', file:'C_est_le_bon_dieu.mp3', lyrics:`Attention, mademoiselle, faut couper le clitoris
+{ title:'Le bon Dieu', file:BASE+'C_est_le_bon_dieu.mp3', lyrics:`Attention, mademoiselle, faut couper le clitoris
 C'est qui qui, qui l'a dit
 C'est l'bon dieu, qui l'a dit
 Faut recoudre la zézette, c'est un trou qu'est interdit
@@ -634,7 +635,7 @@ Pleurer et puis prier
 Le bon dieu, le bon dieu`
   },
 
-  { title:'Quel est le sexe des anges', file:'Quel_est_le_sexe_des_anges.mp3', lyrics:`Les anges à l'angélus soupirent ingénus
+  { title:'Quel est le sexe des anges', file:BASE+'Quel_est_le_sexe_des_anges.mp3', lyrics:`Les anges à l'angélus soupirent ingénus
 Dans le silence
 Deux anges à l'heure élue s'allongent alors émus
 Le corps dénudé
@@ -663,7 +664,7 @@ Deux anges à l'heure élue dans leur premier baiser
 Rient de leur enfance`
   },
 
-  { title:'S\'il faut aimer la terre', file:'S_il_faut_aimer_la_terre.mp3', lyrics:`Dis-moi pourquoi ma mère
+  { title:'S\'il faut aimer la terre', file:BASE+'S_il_faut_aimer_la_terre.mp3', lyrics:`Dis-moi pourquoi ma mère
 Tu m’as fait ça
 Dis-moi pourquoi ma mère
 Tu m’as fait dans ce monde-là (bis)
@@ -709,7 +710,7 @@ S’il faut aimer la terre
 Alors qu’on la jette sur moi (bis)`
   },
 
-  { title:'La publicité', file:'La_publicite.mp3', lyrics:`Sans publicité t’es marron
+  { title:'La publicité', file:BASE+'La_publicite.mp3', lyrics:`Sans publicité t’es marron
 Lève ton nez vers les affiches
 C’est du bonheur pour pas un rond
 D’nos jours faut faire gaffe à l’artiche
